@@ -1,7 +1,7 @@
 package com.workflow.engine.trigger;
 
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +21,7 @@ public class CronTrigger implements WorkflowTrigger {
     private TriggerContext context;
     private TaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledFuture;
-    private CronTrigger springCronTrigger;
+    private org.springframework.scheduling.support.CronTrigger springCronTrigger;
     
     public CronTrigger(String id, TaskScheduler taskScheduler) {
         this.id = id;
@@ -45,7 +45,7 @@ public class CronTrigger implements WorkflowTrigger {
         if (cronExpression == null || cronExpression.trim().isEmpty()) {
             throw new IllegalArgumentException("Cron expression is required");
         }
-        this.springCronTrigger = new CronTrigger(cronExpression);
+        this.springCronTrigger = new org.springframework.scheduling.support.CronTrigger(cronExpression);
         logger.info("Initialized cron trigger with expression: {}", cronExpression);
     }
     
