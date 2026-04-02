@@ -25,34 +25,9 @@ public interface NodeExecutor {
      * 执行节点逻辑
      * @param context 执行上下文
      * @return 执行结果
+     * @throws Exception 执行异常
      */
     NodeExecutionResult execute(NodeExecutionContext context) throws Exception;
-
-    /**
-     * 兼容旧接口的执行方法
-     */
-    default NodeExecutionResult execute(String config, String inputData) {
-        try {
-            NodeExecutionContext context = new NodeExecutionContext();
-            context.setInputData(parseJson(inputData));
-            // 这里需要解析 config，简化处理
-            return execute(context);
-        } catch (Exception e) {
-            return NodeExecutionResult.failure(e.getMessage());
-        }
-    }
-
-    private Map<String, Object> parseJson(String json) {
-        if (json == null || json.trim().isEmpty()) {
-            return new java.util.HashMap<>();
-        }
-        try {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            return mapper.readValue(json, Map.class);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse JSON: " + e.getMessage(), e);
-        }
-    }
 
     /**
      * 验证节点配置是否有效

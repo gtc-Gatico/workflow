@@ -3,7 +3,6 @@ package com.workflow.controller;
 import com.workflow.model.Workflow;
 import com.workflow.model.WorkflowExecution;
 import com.workflow.service.WorkflowService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +10,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 工作流控制器
+ * 提供 RESTful API 用于管理工作流和执行记录
+ */
 @RestController
 @RequestMapping("/api/workflows")
 @CrossOrigin(origins = "*")
 public class WorkflowController {
-    
-    @Autowired
-    private WorkflowService workflowService;
-    
+
+    private final WorkflowService workflowService;
+
+    public WorkflowController(WorkflowService workflowService) {
+        this.workflowService = workflowService;
+    }
+
     /**
      * Get all workflows
      */
@@ -26,7 +32,7 @@ public class WorkflowController {
     public ResponseEntity<List<Workflow>> getAllWorkflows() {
         return ResponseEntity.ok(workflowService.getAllWorkflows());
     }
-    
+
     /**
      * Get workflow by ID
      */
@@ -38,7 +44,7 @@ public class WorkflowController {
         }
         return ResponseEntity.ok(workflow);
     }
-    
+
     /**
      * Create a new workflow
      */
@@ -47,7 +53,7 @@ public class WorkflowController {
         Workflow created = workflowService.createWorkflow(workflow);
         return ResponseEntity.ok(created);
     }
-    
+
     /**
      * Update an existing workflow
      */
@@ -62,7 +68,7 @@ public class WorkflowController {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     /**
      * Delete a workflow
      */
@@ -71,7 +77,7 @@ public class WorkflowController {
         workflowService.deleteWorkflow(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     /**
      * Execute a workflow
      */
@@ -84,10 +90,10 @@ public class WorkflowController {
             WorkflowExecution execution = workflowService.executeWorkflow(id, inputJson);
             return ResponseEntity.ok(execution);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(null);
         }
     }
-    
+
     /**
      * Get executions for a workflow
      */
@@ -95,7 +101,10 @@ public class WorkflowController {
     public ResponseEntity<List<WorkflowExecution>> getWorkflowExecutions(@PathVariable Long id) {
         return ResponseEntity.ok(workflowService.getWorkflowExecutions(id));
     }
-    
+
+    /**
+     * Convert Map to JSON string (simple implementation)
+     */
     private String convertToJson(Map<String, Object> map) {
         StringBuilder json = new StringBuilder("{");
         boolean first = true;
