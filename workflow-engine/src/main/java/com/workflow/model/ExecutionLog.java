@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
  * 执行日志 (类似 n8n 的 Execution Log)
  * 记录每个节点执行的详细输入输出、错误信息、耗时等
  */
-@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -59,4 +58,38 @@ public class ExecutionLog {
     public enum ExecutionStatus {
         STARTED, SUCCESS, ERROR, SKIPPED
     }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public WorkflowExecution getExecution() { return execution; }
+    public void setExecution(WorkflowExecution execution) { this.execution = execution; }
+
+    public String getNodeId() { return nodeId; }
+    public void setNodeId(String nodeId) { this.nodeId = nodeId; }
+
+    public String getNodeName() { return nodeName; }
+    public void setNodeName(String nodeName) { this.nodeName = nodeName; }
+
+    public ExecutionStatus getStatus() { return status; }
+    public void setStatus(ExecutionStatus status) { this.status = status; }
+
+    public String getInputData() { return inputData; }
+    public void setInputData(String inputData) { this.inputData = inputData; }
+
+    public String getOutputData() { return outputData; }
+    public void setOutputData(String outputData) { this.outputData = outputData; }
+
+    public String getErrorMessage() { return errorMessage; }
+    public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+
+    public Long getDurationMs() { return durationMs; }
+    public void setDurationMs(Long durationMs) { this.durationMs = durationMs; }
+
+    public LocalDateTime getStartedAt() { return startedAt; }
+    public void setStartedAt(LocalDateTime startedAt) { this.startedAt = startedAt; }
+
+    public LocalDateTime getEndedAt() { return endedAt; }
+    public void setEndedAt(LocalDateTime endedAt) { this.endedAt = endedAt; }
 }

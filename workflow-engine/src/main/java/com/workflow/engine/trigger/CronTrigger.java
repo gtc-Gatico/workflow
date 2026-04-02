@@ -21,7 +21,7 @@ public class CronTrigger implements WorkflowTrigger {
     private TriggerContext context;
     private TaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledFuture;
-    private CronTrigger cronTrigger;
+    private CronTrigger springCronTrigger;
     
     public CronTrigger(String id, TaskScheduler taskScheduler) {
         this.id = id;
@@ -45,7 +45,7 @@ public class CronTrigger implements WorkflowTrigger {
         if (cronExpression == null || cronExpression.trim().isEmpty()) {
             throw new IllegalArgumentException("Cron expression is required");
         }
-        this.cronTrigger = new CronTrigger(cronExpression);
+        this.springCronTrigger = new CronTrigger(cronExpression);
         logger.info("Initialized cron trigger with expression: {}", cronExpression);
     }
     
@@ -56,7 +56,7 @@ public class CronTrigger implements WorkflowTrigger {
             return;
         }
         
-        scheduledFuture = taskScheduler.schedule(this::execute, cronTrigger);
+        scheduledFuture = taskScheduler.schedule(this::execute, springCronTrigger);
         logger.info("Cron trigger started for workflow: {}", context.getWorkflowId());
     }
     
@@ -71,7 +71,6 @@ public class CronTrigger implements WorkflowTrigger {
     
     @Override
     public void trigger(Map<String, Object> payload) {
-        // Cron 触发器自动执行，不需要手动触发
         logger.debug("Manual trigger not supported for cron trigger");
     }
     
