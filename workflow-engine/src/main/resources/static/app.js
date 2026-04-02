@@ -117,7 +117,7 @@ class WorkflowEditor {
         
         this.nodes.push(node);
         this.renderNode(node);
-        this.log(`Added node: ${node.name} (${type})`, 'info');
+        this.log(`已添加节点：${node.name} (${type})`, 'info');
     }
 
     getNodeDefinition(type) {
@@ -459,7 +459,7 @@ class WorkflowEditor {
         
         let configHtml = `
             <div class="form-group">
-                <label>Node Name</label>
+                <label>节点名称</label>
                 <input type="text" id="config-name" value="${node.name}" />
             </div>
         `;
@@ -478,8 +478,8 @@ class WorkflowEditor {
                     <div class="form-group">
                         <label>${this.capitalize(key)}</label>
                         <select id="config-${key}">
-                            <option value="true" ${value ? 'selected' : ''}>Yes</option>
-                            <option value="false" ${!value ? 'selected' : ''}>No</option>
+                            <option value="true" ${value ? 'selected' : ''}>是</option>
+                            <option value="false" ${!value ? 'selected' : ''}>否</option>
                         </select>
                     </div>
                 `;
@@ -494,7 +494,7 @@ class WorkflowEditor {
         }
         
         configHtml += `
-            <button class="toolbar-btn primary" style="width: 100%; margin-top: 1rem;" onclick="editor.saveConfig()">Save Configuration</button>
+            <button class="toolbar-btn primary" style="width: 100%; margin-top: 1rem;" onclick="editor.saveConfig()">保存配置</button>
         `;
         
         this.configContent.innerHTML = configHtml;
@@ -523,11 +523,11 @@ class WorkflowEditor {
             }
         }
         
-        this.log(`Saved configuration for ${this.selectedNode.name}`, 'success');
+        this.log(`${this.selectedNode.name} 配置已保存`, 'success');
     }
 
     closeConfig() {
-        this.configContent.innerHTML = '<p class="placeholder-text">Select a node to configure</p>';
+        this.configContent.innerHTML = '<p class="placeholder-text">选择一个节点进行配置</p>';
         if (this.selectedNode) {
             const nodeEl = document.getElementById(this.selectedNode.id);
             if (nodeEl) nodeEl.classList.remove('selected');
@@ -554,7 +554,7 @@ class WorkflowEditor {
         this.nodes.splice(nodeIndex, 1);
         
         this.updateConnections();
-        this.log(`Deleted node: ${node.name}`, 'info');
+        this.log(`已删除节点：${node.name}`, 'info');
         
         if (this.selectedNode && this.selectedNode.id === nodeId) {
             this.closeConfig();
@@ -593,7 +593,7 @@ class WorkflowEditor {
         };
         
         localStorage.setItem('workflow_current', JSON.stringify(workflow));
-        this.log('Workflow saved locally', 'success');
+        this.log('工作流已保存到本地', 'success');
         
         // Could also send to backend
         // fetch('/api/workflows', { method: 'POST', body: JSON.stringify(workflow) })
@@ -604,7 +604,7 @@ class WorkflowEditor {
         if (saved) {
             const workflow = JSON.parse(saved);
             this.loadWorkflowData(workflow);
-            this.log('Workflow loaded', 'success');
+            this.log('工作流已加载', 'success');
         }
     }
 
@@ -643,7 +643,7 @@ class WorkflowEditor {
         const triggers = this.nodes.filter(n => ['webhook', 'schedule'].includes(n.type));
         
         if (triggers.length === 0) {
-            this.log('No trigger node found. Add a Webhook or Schedule node.', 'error');
+            this.log('未找到触发器节点，请添加 Webhook 或定时触发节点', 'error');
             return;
         }
         

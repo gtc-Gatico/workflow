@@ -1,60 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workflow Engine - Visual Editor</title>
+    <title>工作流引擎 - 可视化编辑器</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
         <!-- Left Sidebar - Node Palette -->
         <aside class="sidebar left-sidebar">
-            <h3>Nodes</h3>
+            <h3>节点面板</h3>
             <div class="node-palette">
                 <div class="node-category">
-                    <h4>Triggers</h4>
+                    <h4>触发器</h4>
                     <div class="node-item" draggable="true" data-type="webhook">
                         <span class="node-icon">🌐</span>
                         <span>Webhook</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="schedule">
                         <span class="node-icon">⏰</span>
-                        <span>Schedule</span>
+                        <span>定时触发</span>
                     </div>
                 </div>
                 <div class="node-category">
-                    <h4>Actions</h4>
+                    <h4>动作</h4>
                     <div class="node-item" draggable="true" data-type="httpRequest">
                         <span class="node-icon">📡</span>
-                        <span>HTTP Request</span>
+                        <span>HTTP 请求</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="code">
                         <span class="node-icon">💻</span>
-                        <span>Code</span>
+                        <span>代码执行</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="set">
                         <span class="node-icon">✏️</span>
-                        <span>Set</span>
+                        <span>字段设置</span>
                     </div>
                 </div>
                 <div class="node-category">
-                    <h4>Flow Control</h4>
+                    <h4>流程控制</h4>
                     <div class="node-item" draggable="true" data-type="switch">
                         <span class="node-icon">🔀</span>
-                        <span>Switch</span>
+                        <span>条件分支</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="merge">
                         <span class="node-icon">🔗</span>
-                        <span>Merge</span>
+                        <span>数据合并</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="filter">
                         <span class="node-icon">🔍</span>
-                        <span>Filter</span>
+                        <span>数据过滤</span>
                     </div>
                     <div class="node-item" draggable="true" data-type="splitInBatches">
                         <span class="node-icon">📦</span>
-                        <span>Split In Batches</span>
+                        <span>分批处理</span>
                     </div>
                 </div>
             </div>
@@ -63,10 +63,10 @@
         <!-- Main Canvas Area -->
         <main class="canvas-container">
             <div class="toolbar">
-                <button id="btn-new" class="toolbar-btn">📄 New</button>
-                <button id="btn-save" class="toolbar-btn">💾 Save</button>
-                <button id="btn-load" class="toolbar-btn">📂 Load</button>
-                <button id="btn-execute" class="toolbar-btn primary">▶️ Execute</button>
+                <button id="btn-new" class="toolbar-btn">📄 新建</button>
+                <button id="btn-save" class="toolbar-btn">💾 保存</button>
+                <button id="btn-load" class="toolbar-btn">📂 加载</button>
+                <button id="btn-execute" class="toolbar-btn primary">▶️ 执行</button>
                 <div class="zoom-controls">
                     <button id="btn-zoom-out" class="toolbar-btn">−</button>
                     <span id="zoom-level">100%</span>
@@ -82,11 +82,11 @@
         <!-- Right Sidebar - Node Configuration -->
         <aside class="sidebar right-sidebar" id="config-panel">
             <div class="config-header">
-                <h3 id="config-title">Node Configuration</h3>
+                <h3 id="config-title">节点配置</h3>
                 <button id="btn-close-config" class="close-btn">×</button>
             </div>
             <div class="config-content" id="config-content">
-                <p class="placeholder-text">Select a node to configure</p>
+                <p class="placeholder-text">选择一个节点进行配置</p>
             </div>
         </aside>
     </div>
@@ -94,7 +94,7 @@
     <!-- Execution Log Panel -->
     <div class="execution-log" id="execution-log">
         <div class="log-header">
-            <h4>Execution Log</h4>
+            <h4>执行日志</h4>
             <button id="btn-close-log" class="close-btn">×</button>
         </div>
         <div class="log-content" id="log-content"></div>
