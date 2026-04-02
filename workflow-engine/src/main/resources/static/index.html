@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Engine - Visual Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar - Node Palette -->
+        <aside class="sidebar left-sidebar">
+            <h3>Nodes</h3>
+            <div class="node-palette">
+                <div class="node-category">
+                    <h4>Triggers</h4>
+                    <div class="node-item" draggable="true" data-type="webhook">
+                        <span class="node-icon">🌐</span>
+                        <span>Webhook</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="schedule">
+                        <span class="node-icon">⏰</span>
+                        <span>Schedule</span>
+                    </div>
+                </div>
+                <div class="node-category">
+                    <h4>Actions</h4>
+                    <div class="node-item" draggable="true" data-type="httpRequest">
+                        <span class="node-icon">📡</span>
+                        <span>HTTP Request</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="code">
+                        <span class="node-icon">💻</span>
+                        <span>Code</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="set">
+                        <span class="node-icon">✏️</span>
+                        <span>Set</span>
+                    </div>
+                </div>
+                <div class="node-category">
+                    <h4>Flow Control</h4>
+                    <div class="node-item" draggable="true" data-type="switch">
+                        <span class="node-icon">🔀</span>
+                        <span>Switch</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="merge">
+                        <span class="node-icon">🔗</span>
+                        <span>Merge</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="filter">
+                        <span class="node-icon">🔍</span>
+                        <span>Filter</span>
+                    </div>
+                    <div class="node-item" draggable="true" data-type="splitInBatches">
+                        <span class="node-icon">📦</span>
+                        <span>Split In Batches</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Canvas Area -->
+        <main class="canvas-container">
+            <div class="toolbar">
+                <button id="btn-new" class="toolbar-btn">📄 New</button>
+                <button id="btn-save" class="toolbar-btn">💾 Save</button>
+                <button id="btn-load" class="toolbar-btn">📂 Load</button>
+                <button id="btn-execute" class="toolbar-btn primary">▶️ Execute</button>
+                <div class="zoom-controls">
+                    <button id="btn-zoom-out" class="toolbar-btn">−</button>
+                    <span id="zoom-level">100%</span>
+                    <button id="btn-zoom-in" class="toolbar-btn">+</button>
+                </div>
+            </div>
+            <div class="canvas-wrapper">
+                <svg id="connections-layer" class="connections-layer"></svg>
+                <div id="nodes-canvas" class="nodes-canvas"></div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Node Configuration -->
+        <aside class="sidebar right-sidebar" id="config-panel">
+            <div class="config-header">
+                <h3 id="config-title">Node Configuration</h3>
+                <button id="btn-close-config" class="close-btn">×</button>
+            </div>
+            <div class="config-content" id="config-content">
+                <p class="placeholder-text">Select a node to configure</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Execution Log Panel -->
+    <div class="execution-log" id="execution-log">
+        <div class="log-header">
+            <h4>Execution Log</h4>
+            <button id="btn-close-log" class="close-btn">×</button>
+        </div>
+        <div class="log-content" id="log-content"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
