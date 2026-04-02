@@ -38,7 +38,7 @@ public interface NodeExecutor {
             // 这里需要解析 config，简化处理
             return execute(context);
         } catch (Exception e) {
-            return NodeExecutionResult.error(e.getMessage());
+            return NodeExecutionResult.failure(e.getMessage());
         }
     }
 

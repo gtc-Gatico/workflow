@@ -2,6 +2,7 @@ package com.workflow.engine.version;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 工作流版本控制 - 类似 n8n 的版本管理

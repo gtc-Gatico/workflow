@@ -12,6 +12,7 @@ public class NodeExecutionContext {
     private String executionId;
     private String currentNodeId;
     private Map<String, Object> inputData;
+    private Map<String, Object> nodeConfig; // 节点配置
     private Map<String, Object> globalData; // 全局数据，跨节点共享
     private Map<String, Object> credentials; // 凭证数据
     private int retryCount;
@@ -36,6 +37,9 @@ public class NodeExecutionContext {
 
     public Map<String, Object> getInputData() { return inputData; }
     public void setInputData(Map<String, Object> inputData) { this.inputData = inputData; }
+
+    public Map<String, Object> getNodeConfig() { return nodeConfig; }
+    public void setNodeConfig(Map<String, Object> nodeConfig) { this.nodeConfig = nodeConfig; }
 
     public Map<String, Object> getGlobalData() { return globalData; }
     public void setGlobalData(Map<String, Object> globalData) { this.globalData = globalData; }

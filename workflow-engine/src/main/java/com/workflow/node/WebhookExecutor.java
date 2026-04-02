@@ -14,15 +14,18 @@ public class WebhookExecutor implements NodeExecutor {
     }
     
     @Override
-    public NodeExecutionResult execute(String config, String inputData) {
+    public NodeExecutionResult execute(NodeExecutionContext context) throws Exception {
         // Webhook nodes are triggers, they pass through the input data
         // In a real implementation, this would set up a webhook endpoint
         try {
-            // For now, just pass through the input data
-            if (inputData == null || inputData.isEmpty()) {
+            Object inputData = context.getInputData();
+            if (inputData == null) {
                 return NodeExecutionResult.success("{}");
             }
-            return NodeExecutionResult.success(inputData);
+            if (inputData instanceof String) {
+                return NodeExecutionResult.success((String) inputData);
+            }
+            return NodeExecutionResult.success(inputData.toString());
         } catch (Exception e) {
             return NodeExecutionResult.failure("Webhook execution failed: " + e.getMessage());
         }

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import java.net.http.*;
 import java.net.URI;
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Executor for HTTP Request nodes
@@ -17,13 +18,12 @@ public class HttpRequestExecutor implements NodeExecutor {
     }
     
     @Override
-    public NodeExecutionResult execute(String config, String inputData) {
+    public NodeExecutionResult execute(NodeExecutionContext context) throws Exception {
         try {
-            // Parse config (simplified - in production use proper JSON parsing)
-            // Config expected format: {"method": "GET", "url": "https://api.example.com", "headers": {...}}
+            Map<String, Object> config = context.getNodeConfig();
             
-            String method = extractJsonValue(config, "method");
-            String url = extractJsonValue(config, "url");
+            String method = config != null ? (String) config.get("method") : null;
+            String url = config != null ? (String) config.get("url") : null;
             
             if (url == null || url.isEmpty()) {
                 return NodeExecutionResult.failure("URL is required");
@@ -47,12 +47,12 @@ public class HttpRequestExecutor implements NodeExecutor {
                     requestBuilder.GET();
                     break;
                 case "POST":
-                    String body = extractJsonValue(config, "body");
+                    String body = config != null ? (String) config.get("body") : null;
                     requestBuilder.POST(body != null ? HttpRequest.BodyPublishers.ofString(body) 
                             : HttpRequest.BodyPublishers.noBody());
                     break;
                 case "PUT":
-                    String putBody = extractJsonValue(config, "body");
+                    String putBody = config != null ? (String) config.get("body") : null;
                     requestBuilder.PUT(putBody != null ? HttpRequest.BodyPublishers.ofString(putBody) 
                             : HttpRequest.BodyPublishers.noBody());
                     break;
@@ -77,47 +77,6 @@ public class HttpRequestExecutor implements NodeExecutor {
             
         } catch (Exception e) {
             return NodeExecutionResult.failure("HTTP request failed: " + e.getMessage());
-        }
-    }
-    
-    private String extractJsonValue(String json, String key) {
-        if (json == null || json.isEmpty()) {
-            return null;
-        }
-        // Simple extraction - in production use proper JSON library
-        String searchKey = "\"" + key + "\"";
-        int keyIndex = json.indexOf(searchKey);
-        if (keyIndex == -1) {
-            return null;
-        }
-        
-        int colonIndex = json.indexOf(':', keyIndex);
-        if (colonIndex == -1) {
-            return null;
-        }
-        
-        int startIndex = colonIndex + 1;
-        while (startIndex < json.length() && Character.isWhitespace(json.charAt(startIndex))) {
-            startIndex++;
-        }
-        
-        if (startIndex >= json.length()) {
-            return null;
-        }
-        
-        char firstChar = json.charAt(startIndex);
-        if (firstChar == '"') {
-            int endIndex = json.indexOf('"', startIndex + 1);
-            if (endIndex == -1) {
-                return null;
-            }
-            return json.substring(startIndex + 1, endIndex);
-        } else {
-            int endIndex = startIndex;
-            while (endIndex < json.length() && json.charAt(endIndex) != ',' && json.charAt(endIndex) != '}') {
-                endIndex++;
-            }
-            return json.substring(startIndex, endIndex).trim();
         }
     }
 }
