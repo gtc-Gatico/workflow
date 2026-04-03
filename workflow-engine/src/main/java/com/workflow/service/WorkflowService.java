@@ -117,9 +117,10 @@ public class WorkflowService {
                 throw new RuntimeException("No active nodes found in workflow");
             }
 
-            // Create a map of node ID to node for quick lookup
-            Map<Long, WorkflowNode> nodeMap = nodes.stream()
-                .collect(Collectors.toMap(WorkflowNode::getId, node -> node));
+            // Create a map of node ID (string) to node for quick lookup
+            // Frontend uses string IDs like "node_1", so we convert Long IDs to strings
+            Map<String, WorkflowNode> nodeMap = nodes.stream()
+                .collect(Collectors.toMap(n -> n.getId().toString(), node -> node));
 
             // Find the first node (trigger node)
             WorkflowNode currentNode = nodes.stream()
@@ -157,8 +158,8 @@ public class WorkflowService {
                 String nextNodeId = result.getNextNodeId() != null ?
                     result.getNextNodeId() : currentNode.getNextNodeId();
 
-                if (nextNodeId != null && nodeMap.containsKey(Long.parseLong(nextNodeId))) {
-                    currentNode = nodeMap.get(Long.parseLong(nextNodeId));
+                if (nextNodeId != null && nodeMap.containsKey(nextNodeId)) {
+                    currentNode = nodeMap.get(nextNodeId);
                 } else {
                     currentNode = null;
                 }
