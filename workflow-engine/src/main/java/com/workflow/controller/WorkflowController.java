@@ -1,7 +1,9 @@
 package com.workflow.controller;
 
+import com.workflow.dto.WorkflowDTO;
 import com.workflow.model.Workflow;
 import com.workflow.model.WorkflowExecution;
+import com.workflow.model.WorkflowNode;
 import com.workflow.service.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/workflows")
@@ -43,8 +46,8 @@ public class WorkflowController {
      * Create a new workflow
      */
     @PostMapping
-    public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
-        Workflow created = workflowService.createWorkflow(workflow);
+    public ResponseEntity<Workflow> createWorkflow(@RequestBody WorkflowDTO workflowDTO) {
+        Workflow created = workflowService.createWorkflowFromDTO(workflowDTO);
         return ResponseEntity.ok(created);
     }
     
@@ -54,9 +57,9 @@ public class WorkflowController {
     @PutMapping("/{id}")
     public ResponseEntity<Workflow> updateWorkflow(
             @PathVariable Long id,
-            @RequestBody Workflow workflow) {
+            @RequestBody WorkflowDTO workflowDTO) {
         try {
-            Workflow updated = workflowService.updateWorkflow(id, workflow);
+            Workflow updated = workflowService.updateWorkflowFromDTO(id, workflowDTO);
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

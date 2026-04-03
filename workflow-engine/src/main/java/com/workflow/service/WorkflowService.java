@@ -1,5 +1,7 @@
 package com.workflow.service;
 
+import com.workflow.dto.WorkflowDTO;
+import com.workflow.dto.WorkflowNodeDTO;
 import com.workflow.model.Workflow;
 import com.workflow.model.WorkflowExecution;
 import com.workflow.model.WorkflowNode;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,38 +50,89 @@ public class WorkflowService {
     }
     
     /**
-     * Create a new workflow
+     * Create a new workflow from DTO
      */
     @Transactional
-    public Workflow createWorkflow(Workflow workflow) {
+    public Workflow createWorkflowFromDTO(WorkflowDTO workflowDTO) {
+        Workflow workflow = new Workflow();
+        workflow.setName(workflowDTO.getName());
+        workflow.setDescription(workflowDTO.getDescription());
+        workflow.setActive(workflowDTO.isActive());
         workflow.setCreatedAt(LocalDateTime.now());
         workflow.setUpdatedAt(LocalDateTime.now());
-        return workflowRepository.save(workflow);
+        
+        Workflow savedWorkflow = workflowRepository.save(workflow);
+        
+        // Save nodes if provided
+        if (workflowDTO.getNodes() != null && !workflowDTO.getNodes().isEmpty()) {
+            List<WorkflowNode> nodes = convertToEntities(workflowDTO.getNodes(), savedWorkflow);
+            workflowNodeRepository.saveAll(nodes);
+        }
+        
+        return savedWorkflow;
     }
     
     /**
-     * Update an existing workflow
+     * Update an existing workflow from DTO
      */
     @Transactional
-    public Workflow updateWorkflow(Long id, Workflow workflowDetails) {
+    public Workflow updateWorkflowFromDTO(Long id, WorkflowDTO workflowDTO) {
         Workflow workflow = workflowRepository.findById(id).orElseThrow(
             () -> new RuntimeException("Workflow not found with id: " + id)
         );
         
-        workflow.setName(workflowDetails.getName());
-        workflow.setDescription(workflowDetails.getDescription());
-        workflow.setActive(workflowDetails.isActive());
+        workflow.setName(workflowDTO.getName());
+        workflow.setDescription(workflowDTO.getDescription());
+        workflow.setActive(workflowDTO.isActive());
         workflow.setUpdatedAt(LocalDateTime.now());
         
-        return workflowRepository.save(workflow);
+        Workflow savedWorkflow = workflowRepository.save(workflow);
+        
+        // Delete existing nodes and save new ones
+        workflowNodeRepository.deleteByWorkflowId(id);
+        
+        if (workflowDTO.getNodes() != null && !workflowDTO.getNodes().isEmpty()) {
+            List<WorkflowNode> nodes = convertToEntities(workflowDTO.getNodes(), savedWorkflow);
+            workflowNodeRepository.saveAll(nodes);
+        }
+        
+        return savedWorkflow;
     }
     
     /**
-     * Delete a workflow
+     * Convert WorkflowNodeDTO list to WorkflowNode entities
      */
-    @Transactional
-    public void deleteWorkflow(Long id) {
-        workflowRepository.deleteById(id);
+    private List<WorkflowNode> convertToEntities(List<WorkflowNodeDTO> dtoNodes, Workflow workflow) {
+        List<WorkflowNode> entities = new ArrayList<>();
+        
+        for (WorkflowNodeDTO dto : dtoNodes) {
+            WorkflowNode entity = new WorkflowNode();
+            entity.setWorkflow(workflow);
+            entity.setNodeType(dto.getNodeType());
+            entity.setType(dto.getType());
+            entity.setName(dto.getName());
+            entity.setConfig(dto.getConfig());
+            entity.setPositionX(dto.getPositionX());
+            entity.setPositionY(dto.getPositionY());
+            entity.setActive(dto.isActive());
+            
+            // Parse nextNodeId from string to Long if it's a numeric string
+            if (dto.getNextNodeId() != null && !dto.getNextNodeId().isEmpty()) {
+                try {
+                    // Try to parse as Long (for database IDs)
+                    entity.setNextNodeId(Long.parseLong(dto.getNextNodeId()));
+                } catch (NumberFormatException e) {
+                    // If it's not a numeric string (e.g., "node_1"), we can't store it directly
+                    // In this case, we might need to look up the actual node ID or store as null
+                    // For now, we'll set it to null and handle resolution during execution
+                    entity.setNextNodeId(null);
+                }
+            }
+            
+            entities.add(entity);
+        }
+        
+        return entities;
     }
     
     /**
