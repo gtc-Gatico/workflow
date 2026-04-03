@@ -592,11 +592,33 @@ class WorkflowEditor {
             savedAt: new Date().toISOString()
         };
         
+        // Save to localStorage as backup
         localStorage.setItem('workflow_current', JSON.stringify(workflow));
-        this.log('工作流已保存到本地', 'success');
         
-        // Could also send to backend
-        // fetch('/api/workflows', { method: 'POST', body: JSON.stringify(workflow) })
+        // Send to backend
+        fetch('/api/workflows', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workflow)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Save failed');
+        })
+        .then(data => {
+            this.log('工作流已保存到服务器', 'success');
+            console.log('Workflow saved:', data);
+        })
+        .catch(error => {
+            this.log('保存到服务器失败：' + error.message, 'error');
+            console.error('Error saving workflow:', error);
+            // Fallback: still saved to localStorage
+            this.log('已保存到本地存储', 'info');
+        });
     }
 
     loadWorkflow() {
