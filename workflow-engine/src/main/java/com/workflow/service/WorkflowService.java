@@ -118,9 +118,9 @@ public class WorkflowService {
             }
 
             // Create a map of node ID (string) to node for quick lookup
-            // Frontend uses string IDs like "node_1", so we convert Long IDs to strings
+            // Node IDs are now strings directly from the database
             Map<String, WorkflowNode> nodeMap = nodes.stream()
-                .collect(Collectors.toMap(n -> n.getId().toString(), node -> node));
+                .collect(Collectors.toMap(WorkflowNode::getId, node -> node));
 
             // Find the first node (trigger node)
             WorkflowNode currentNode = nodes.stream()
@@ -191,7 +191,7 @@ public class WorkflowService {
         NodeExecutionContext context = new NodeExecutionContext();
         context.setWorkflowId(execution.getWorkflow().getId().toString());
         context.setExecutionId(execution.getId().toString());
-        context.setCurrentNodeId(node.getId().toString());
+        context.setCurrentNodeId(node.getId());
         context.setInputData(parseJson(inputData));
         context.setNodeConfig(parseJson(node.getConfig()));
         return context;

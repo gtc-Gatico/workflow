@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class WorkflowNode {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false, length = 50)
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workflow_id", nullable = false)
@@ -64,8 +64,8 @@ public class WorkflowNode {
     }
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public Workflow getWorkflow() { return workflow; }
     public void setWorkflow(Workflow workflow) { this.workflow = workflow; }
