@@ -1,5 +1,6 @@
 package com.workflow.service;
 
+import com.workflow.dto.WorkflowDTO;
 import com.workflow.model.Workflow;
 import com.workflow.model.WorkflowExecution;
 import com.workflow.model.WorkflowNode;
@@ -66,6 +67,76 @@ public class WorkflowService {
     }
 
     /**
+     * Create a new workflow with nodes from DTO
+     */
+    @Transactional
+    public Workflow createWorkflowWithNodes(Workflow workflow, List<WorkflowDTO.NodeDTO> nodeDTOs, List<WorkflowDTO.ConnectionDTO> connections) {
+        workflow = createWorkflow(workflow);
+        
+        // Build nextNodeId mapping from connections
+        Map<String, String> nextNodeMap = new java.util.HashMap<>();
+        if (connections != null) {
+            for (WorkflowDTO.ConnectionDTO conn : connections) {
+                nextNodeMap.put(conn.getFrom(), conn.getTo());
+            }
+        }
+        
+        // Convert and save nodes
+        if (nodeDTOs != null) {
+            for (WorkflowDTO.NodeDTO nodeDTO : nodeDTOs) {
+                WorkflowNode node = new WorkflowNode();
+                node.setId(nodeDTO.getId());
+                node.setWorkflow(workflow);
+                node.setNodeType(nodeDTO.getNodeType() != null ? nodeDTO.getNodeType() : "action");
+                node.setType(nodeDTO.getType());
+                node.setName(nodeDTO.getName());
+                
+                // Convert config map to JSON string
+                if (nodeDTO.getConfig() != null) {
+                    try {
+                        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                        node.setConfig(mapper.writeValueAsString(nodeDTO.getConfig()));
+                    } catch (Exception e) {
+                        node.setConfig("{}");
+                    }
+                } else {
+                    node.setConfig("{}");
+                }
+                
+                node.setPositionX(nodeDTO.getPositionX() != null ? nodeDTO.getPositionX() : "0");
+                node.setPositionY(nodeDTO.getPositionY() != null ? nodeDTO.getPositionY() : "0");
+                node.setActive(nodeDTO.isActive());
+                
+                // Set next node ID from connection mapping
+                node.setNextNodeId(nextNodeMap.get(nodeDTO.getId()));
+                
+                workflowNodeRepository.save(node);
+                workflow.addNode(node);
+            }
+        }
+        
+        // Set start node (first trigger node or first node)
+        if (nodeDTOs != null && !nodeDTOs.isEmpty()) {
+            String startNodeId = nodeDTOs.stream()
+                .filter(n -> "trigger".equals(n.getNodeType()))
+                .findFirst()
+                .map(WorkflowDTO.NodeDTO::getId)
+                .orElse(nodeDTOs.get(0).getId());
+            workflow.setStartNodeId(startNodeId);
+            
+            // Find end node (node with no next)
+            String endNodeId = nodeDTOs.stream()
+                .filter(n -> nextNodeMap.get(n.getId()) == null)
+                .findFirst()
+                .map(WorkflowDTO.NodeDTO::getId)
+                .orElse(null);
+            workflow.setEndNodeId(endNodeId);
+        }
+        
+        return workflowRepository.save(workflow);
+    }
+
+    /**
      * Update an existing workflow
      */
     @Transactional
@@ -78,6 +149,86 @@ public class WorkflowService {
         workflow.setActive(workflowDetails.isActive());
         workflow.setUpdatedAt(LocalDateTime.now());
 
+        return workflowRepository.save(workflow);
+    }
+
+    /**
+     * Update an existing workflow with nodes from DTO
+     */
+    @Transactional
+    public Workflow updateWorkflowWithNodes(Long id, Workflow workflowDetails, List<WorkflowDTO.NodeDTO> nodeDTOs, List<WorkflowDTO.ConnectionDTO> connections) {
+        Workflow workflow = workflowRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Workflow not found with id: " + id));
+
+        workflow.setName(workflowDetails.getName());
+        workflow.setDescription(workflowDetails.getDescription());
+        workflow.setActive(workflowDetails.isActive());
+        workflow.setUpdatedAt(LocalDateTime.now());
+        
+        // Remove existing nodes
+        workflow.getNodes().clear();
+        workflowNodeRepository.deleteByWorkflowId(id);
+        
+        // Build nextNodeId mapping from connections
+        Map<String, String> nextNodeMap = new java.util.HashMap<>();
+        if (connections != null) {
+            for (WorkflowDTO.ConnectionDTO conn : connections) {
+                nextNodeMap.put(conn.getFrom(), conn.getTo());
+            }
+        }
+        
+        // Convert and save nodes
+        if (nodeDTOs != null) {
+            for (WorkflowDTO.NodeDTO nodeDTO : nodeDTOs) {
+                WorkflowNode node = new WorkflowNode();
+                node.setId(nodeDTO.getId());
+                node.setWorkflow(workflow);
+                node.setNodeType(nodeDTO.getNodeType() != null ? nodeDTO.getNodeType() : "action");
+                node.setType(nodeDTO.getType());
+                node.setName(nodeDTO.getName());
+                
+                // Convert config map to JSON string
+                if (nodeDTO.getConfig() != null) {
+                    try {
+                        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                        node.setConfig(mapper.writeValueAsString(nodeDTO.getConfig()));
+                    } catch (Exception e) {
+                        node.setConfig("{}");
+                    }
+                } else {
+                    node.setConfig("{}");
+                }
+                
+                node.setPositionX(nodeDTO.getPositionX() != null ? nodeDTO.getPositionX() : "0");
+                node.setPositionY(nodeDTO.getPositionY() != null ? nodeDTO.getPositionY() : "0");
+                node.setActive(nodeDTO.isActive());
+                
+                // Set next node ID from connection mapping
+                node.setNextNodeId(nextNodeMap.get(nodeDTO.getId()));
+                
+                workflowNodeRepository.save(node);
+                workflow.addNode(node);
+            }
+        }
+        
+        // Set start node (first trigger node or first node)
+        if (nodeDTOs != null && !nodeDTOs.isEmpty()) {
+            String startNodeId = nodeDTOs.stream()
+                .filter(n -> "trigger".equals(n.getNodeType()))
+                .findFirst()
+                .map(WorkflowDTO.NodeDTO::getId)
+                .orElse(nodeDTOs.get(0).getId());
+            workflow.setStartNodeId(startNodeId);
+            
+            // Find end node (node with no next)
+            String endNodeId = nodeDTOs.stream()
+                .filter(n -> nextNodeMap.get(n.getId()) == null)
+                .findFirst()
+                .map(WorkflowDTO.NodeDTO::getId)
+                .orElse(null);
+            workflow.setEndNodeId(endNodeId);
+        }
+        
         return workflowRepository.save(workflow);
     }
 

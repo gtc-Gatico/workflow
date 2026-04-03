@@ -25,6 +25,7 @@
 /workspace/workflow-engine/src/main/java/com/workflow/service/ExecutionLogService.java
 /workspace/workflow-engine/src/main/java/com/workflow/node/SplitInBatchesExecutor.java
 /workspace/workflow-engine/src/main/java/com/workflow/engine/expression/ExpressionEngine.java
+/workspace/workflow-engine/src/main/java/com/workflow/dto/WorkflowDTO.java
 /workspace/workflow-engine/src/main/java/com/workflow/repository/WorkflowRepository.java
 /workspace/workflow-engine/src/main/java/com/workflow/node/NodeExecutor.java
 /workspace/workflow-engine/src/main/java/com/workflow/engine/trigger/WorkflowTrigger.java

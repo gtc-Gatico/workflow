@@ -1,14 +1,18 @@
 package com.workflow.controller;
 
+import com.workflow.dto.WorkflowDTO;
 import com.workflow.model.Workflow;
 import com.workflow.model.WorkflowExecution;
+import com.workflow.model.WorkflowNode;
 import com.workflow.service.WorkflowService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 工作流控制器
@@ -46,11 +50,12 @@ public class WorkflowController {
     }
 
     /**
-     * Create a new workflow
+     * Create a new workflow from DTO
      */
     @PostMapping
-    public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
-        Workflow created = workflowService.createWorkflow(workflow);
+    public ResponseEntity<Workflow> createWorkflow(@RequestBody WorkflowDTO dto) {
+        Workflow workflow = convertToWorkflow(dto);
+        Workflow created = workflowService.createWorkflowWithNodes(workflow, dto.getNodes(), dto.getConnections());
         return ResponseEntity.ok(created);
     }
 
@@ -60,9 +65,10 @@ public class WorkflowController {
     @PutMapping("/{id}")
     public ResponseEntity<Workflow> updateWorkflow(
             @PathVariable Long id,
-            @RequestBody Workflow workflow) {
+            @RequestBody WorkflowDTO dto) {
         try {
-            Workflow updated = workflowService.updateWorkflow(id, workflow);
+            Workflow workflow = convertToWorkflow(dto);
+            Workflow updated = workflowService.updateWorkflowWithNodes(id, workflow, dto.getNodes(), dto.getConnections());
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -100,6 +106,21 @@ public class WorkflowController {
     @GetMapping("/{id}/executions")
     public ResponseEntity<List<WorkflowExecution>> getWorkflowExecutions(@PathVariable Long id) {
         return ResponseEntity.ok(workflowService.getWorkflowExecutions(id));
+    }
+
+    /**
+     * Convert WorkflowDTO to Workflow entity
+     */
+    private Workflow convertToWorkflow(WorkflowDTO dto) {
+        Workflow workflow = new Workflow();
+        if (dto.getName() != null) {
+            workflow.setName(dto.getName());
+        } else {
+            workflow.setName("Workflow-" + System.currentTimeMillis());
+        }
+        workflow.setDescription(dto.getDescription());
+        workflow.setActive(true);
+        return workflow;
     }
 
     /**
