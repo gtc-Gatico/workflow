@@ -227,6 +227,15 @@ public class WorkflowService {
     }
     
     /**
+     * Delete a workflow
+     */
+    @Transactional
+    public void deleteWorkflow(Long id) {
+        workflowNodeRepository.deleteByWorkflowId(id);
+        workflowRepository.deleteById(id);
+    }
+    
+    /**
      * Find the appropriate executor for a node type
      */
     private NodeExecutor findExecutor(String nodeType) {
