@@ -1,6 +1,8 @@
 package com.workflow.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 
 /**
@@ -44,9 +46,11 @@ public class WorkflowNode {
     private String nextNodeId; // ID of the next node to execute (can be string like "node_1" or numeric ID)
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime updatedAt;
 
     public WorkflowNode() {

@@ -1,6 +1,8 @@
 package com.workflow.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +38,11 @@ public class Workflow {
     private String endNodeId;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime updatedAt;
 
     public Workflow() {
