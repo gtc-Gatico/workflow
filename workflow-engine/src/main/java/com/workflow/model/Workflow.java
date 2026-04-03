@@ -29,6 +29,12 @@ public class Workflow {
     @OneToMany(mappedBy = "workflow", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<WorkflowNode> nodes;
 
+    @Column(name = "start_node_id")
+    private String startNodeId;
+
+    @Column(name = "end_node_id")
+    private String endNodeId;
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
@@ -75,6 +81,12 @@ public class Workflow {
         this.nodes.remove(node);
         node.setWorkflow(null);
     }
+
+    public String getStartNodeId() { return startNodeId; }
+    public void setStartNodeId(String startNodeId) { this.startNodeId = startNodeId; }
+
+    public String getEndNodeId() { return endNodeId; }
+    public void setEndNodeId(String endNodeId) { this.endNodeId = endNodeId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
