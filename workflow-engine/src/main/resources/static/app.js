@@ -437,9 +437,10 @@ class WorkflowEditor {
         
         this.selectedNode = node;
         const nodeEl = document.getElementById(node.id);
-        nodeEl.classList.add('selected');
-        
-        this.showConfig(node);
+        if (nodeEl) {
+            nodeEl.classList.add('selected');
+            this.showConfig(node);
+        }
     }
 
     selectConnection(connection) {

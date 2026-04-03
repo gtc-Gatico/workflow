@@ -41,7 +41,7 @@ public class WorkflowNode {
     private boolean active = true;
 
     @Column(name = "next_node_id")
-    private Long nextNodeId; // ID of the next node to execute
+    private String nextNodeId; // ID of the next node to execute (can be string like "node_1" or numeric ID)
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -91,8 +91,8 @@ public class WorkflowNode {
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 
-    public Long getNextNodeId() { return nextNodeId; }
-    public void setNextNodeId(Long nextNodeId) { this.nextNodeId = nextNodeId; }
+    public String getNextNodeId() { return nextNodeId; }
+    public void setNextNodeId(String nextNodeId) { this.nextNodeId = nextNodeId; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

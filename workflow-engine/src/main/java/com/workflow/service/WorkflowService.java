@@ -154,11 +154,11 @@ public class WorkflowService {
                 currentData = result.getOutputData() != null ? result.getOutputData() : currentData;
 
                 // Move to next node
-                Long nextNodeId = result.getNextNodeId() != null ?
+                String nextNodeId = result.getNextNodeId() != null ?
                     result.getNextNodeId() : currentNode.getNextNodeId();
 
-                if (nextNodeId != null && nodeMap.containsKey(nextNodeId)) {
-                    currentNode = nodeMap.get(nextNodeId);
+                if (nextNodeId != null && nodeMap.containsKey(Long.parseLong(nextNodeId))) {
+                    currentNode = nodeMap.get(Long.parseLong(nextNodeId));
                 } else {
                     currentNode = null;
                 }

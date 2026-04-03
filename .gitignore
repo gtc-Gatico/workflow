@@ -1,6 +1,20 @@
 ```
-# Maven build artifacts
+# Logs
+*.log
+
+# Database file (if it's auto-generated)
+workflow.db
+
+# Build artifacts (if workflow-engine has builds)
 workflow-engine/target/
-# Database file (assuming it's auto-generated)
-workflow-engine/workflow.db
+workflow-engine/build/
+
+# IDE files
+.workflow-engine/.vscode/
+.workflow-engine/.idea/
+
+# Environment files
+.workflow-engine/.env
+.workflow-engine/.env.local
+.workflow-engine/*.env.*
 ```

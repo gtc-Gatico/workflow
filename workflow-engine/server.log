@@ -1,3 +1,4 @@
+nohup: ignoring input
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -7,37 +8,26 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.0)
 
-2026-04-03T00:58:53.448Z  INFO 2167 --- [           main] com.workflow.WorkflowApplication         : Starting WorkflowApplication v1.0.0-SNAPSHOT using Java 17.0.16 with PID 2167 (/workspace/workflow-engine/target/workflow-engine-1.0.0-SNAPSHOT.jar started by root in /workspace/workflow-engine)
-2026-04-03T00:58:53.484Z DEBUG 2167 --- [           main] com.workflow.WorkflowApplication         : Running with Spring Boot v3.2.0, Spring v6.1.1
-2026-04-03T00:58:53.505Z  INFO 2167 --- [           main] com.workflow.WorkflowApplication         : No active profile set, falling back to 1 default profile: "default"
-2026-04-03T00:59:04.467Z  INFO 2167 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-04-03T00:59:05.544Z  INFO 2167 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 939 ms. Found 5 JPA repository interfaces.
-2026-04-03T00:59:11.228Z  INFO 2167 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2026-04-03T00:59:11.328Z  INFO 2167 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2026-04-03T00:59:11.367Z  INFO 2167 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
-2026-04-03T00:59:11.766Z  INFO 2167 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2026-04-03T00:59:11.768Z  INFO 2167 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 17359 ms
-2026-04-03T00:59:13.228Z  INFO 2167 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2026-04-03T00:59:13.726Z  INFO 2167 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
-2026-04-03T00:59:13.988Z  INFO 2167 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2026-04-03T00:59:15.905Z  INFO 2167 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-04-03T00:59:16.069Z  INFO 2167 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-04-03T00:59:16.847Z  INFO 2167 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@3711c71c
-2026-04-03T00:59:16.866Z  INFO 2167 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-04-03T00:59:24.186Z  INFO 2167 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-Hibernate: create table credentials (id integer, created_at timestamp, data TEXT, description varchar(1000), name varchar(255) not null unique, type varchar(255) not null, updated_at timestamp, primary key (id))
-Hibernate: create table execution_logs (id integer, duration_ms bigint, ended_at timestamp, error_message TEXT, input_data TEXT, node_id varchar(255) not null, node_name varchar(255) not null, output_data TEXT, started_at timestamp, status varchar(255) not null check (status in ('STARTED','SUCCESS','ERROR','SKIPPED')), execution_id bigint not null, primary key (id))
-Hibernate: alter table credentials drop constraint UK_4owrs6vwybvrckc3vpqg8i1uw
-Hibernate: alter table credentials add constraint UK_4owrs6vwybvrckc3vpqg8i1uw unique (name)
-2026-04-03T00:59:24.589Z  INFO 2167 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-04-03T00:59:29.304Z  WARN 2167 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-04-03T00:59:29.525Z  INFO 2167 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
-2026-04-03T00:59:33.067Z  INFO 2167 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
-2026-04-03T00:59:33.328Z  INFO 2167 --- [           main] com.workflow.WorkflowApplication         : Started WorkflowApplication in 43.364 seconds (process running for 47.115)
-2026-04-03T00:59:40.886Z  INFO 2167 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2026-04-03T00:59:40.886Z  INFO 2167 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2026-04-03T00:59:40.888Z  INFO 2167 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
-Hibernate: select w1_0.id,w1_0.active,w1_0.created_at,w1_0.description,w1_0.name,w1_0.updated_at from workflows w1_0
-Hibernate: select n1_0.workflow_id,n1_0.id,n1_0.active,n1_0.config,n1_0.created_at,n1_0.name,n1_0.next_node_id,n1_0.node_type,n1_0.positionx,n1_0.positiony,n1_0.type,n1_0.updated_at from workflow_nodes n1_0 where n1_0.workflow_id=?
-Hibernate: insert into workflows (active,created_at,description,name,updated_at) values (?,?,?,?,?)
-Hibernate: select last_insert_rowid()
+2026-04-03T01:35:58.986Z  INFO 6899 --- [           main] com.workflow.WorkflowApplication         : Starting WorkflowApplication v1.0.0-SNAPSHOT using Java 17.0.16 with PID 6899 (/workspace/workflow-engine/target/workflow-engine-1.0.0-SNAPSHOT.jar started by root in /workspace/workflow-engine)
+2026-04-03T01:35:59.024Z DEBUG 6899 --- [           main] com.workflow.WorkflowApplication         : Running with Spring Boot v3.2.0, Spring v6.1.1
+2026-04-03T01:35:59.026Z  INFO 6899 --- [           main] com.workflow.WorkflowApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-04-03T01:36:09.606Z  INFO 6899 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-03T01:36:10.507Z  INFO 6899 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 838 ms. Found 5 JPA repository interfaces.
+2026-04-03T01:36:16.866Z  INFO 6899 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-04-03T01:36:16.965Z  INFO 6899 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-04-03T01:36:16.966Z  INFO 6899 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.16]
+2026-04-03T01:36:17.567Z  INFO 6899 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-04-03T01:36:17.585Z  INFO 6899 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 17719 ms
+2026-04-03T01:36:19.564Z  INFO 6899 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-04-03T01:36:20.287Z  INFO 6899 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.3.1.Final
+2026-04-03T01:36:20.766Z  INFO 6899 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-04-03T01:36:23.288Z  INFO 6899 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-03T01:36:23.626Z  INFO 6899 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-03T01:36:24.446Z  INFO 6899 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.sqlite.jdbc4.JDBC4Connection@34f7b44f
+2026-04-03T01:36:24.449Z  INFO 6899 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-03T01:36:33.389Z  INFO 6899 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-03T01:36:33.766Z  INFO 6899 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03T01:36:39.367Z  WARN 6899 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-03T01:36:39.608Z  INFO 6899 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-04-03T01:36:43.628Z  INFO 6899 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2026-04-03T01:36:43.747Z  INFO 6899 --- [           main] com.workflow.WorkflowApplication         : Started WorkflowApplication in 49.76 seconds (process running for 54.122)

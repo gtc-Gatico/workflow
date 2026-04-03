@@ -15,7 +15,7 @@ public class NodeExecutionResult {
     private Map<String, Object> outputObject; // 支持结构化输出
     private List<Map<String, Object>> items; // 支持多项输出 (类似 n8n 的 items)
     private String error;
-    private Long nextNodeId;
+    private String nextNodeId;
     private List<String> branchOutputs; // 多分支输出
     private long executionTimeMs;
     private Map<String, Object> metadata;
@@ -26,7 +26,7 @@ public class NodeExecutionResult {
         this.metadata = new HashMap<>();
     }
     
-    public NodeExecutionResult(boolean success, String outputData, String error, Long nextNodeId) {
+    public NodeExecutionResult(boolean success, String outputData, String error, String nextNodeId) {
         this();
         this.success = success;
         this.outputData = outputData;
@@ -52,11 +52,11 @@ public class NodeExecutionResult {
         return result;
     }
     
-    public static NodeExecutionResult success(String outputData, Long nextNodeId) {
+    public static NodeExecutionResult success(String outputData, String nextNodeId) {
         return new NodeExecutionResult(true, outputData, null, nextNodeId);
     }
 
-    public static NodeExecutionResult success(Map<String, Object> outputObject, Long nextNodeId) {
+    public static NodeExecutionResult success(Map<String, Object> outputObject, String nextNodeId) {
         NodeExecutionResult result = success(outputObject);
         result.setNextNodeId(nextNodeId);
         return result;
@@ -88,8 +88,8 @@ public class NodeExecutionResult {
     public String getError() { return error; }
     public void setError(String error) { this.error = error; }
     
-    public Long getNextNodeId() { return nextNodeId; }
-    public void setNextNodeId(Long nextNodeId) { this.nextNodeId = nextNodeId; }
+    public String getNextNodeId() { return nextNodeId; }
+    public void setNextNodeId(String nextNodeId) { this.nextNodeId = nextNodeId; }
 
     public List<String> getBranchOutputs() { return branchOutputs; }
     public void setBranchOutputs(List<String> branchOutputs) { this.branchOutputs = branchOutputs; }
