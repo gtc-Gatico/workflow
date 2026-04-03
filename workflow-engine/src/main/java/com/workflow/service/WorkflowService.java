@@ -140,7 +140,12 @@ public class WorkflowService {
                 // Build execution context
                 NodeExecutionContext context = buildExecutionContext(execution, currentNode, currentData);
 
-                NodeExecutionResult result = executor.execute(context);
+                NodeExecutionResult result;
+                try {
+                    result = executor.execute(context);
+                } catch (Exception e) {
+                    throw new RuntimeException("Node execution failed: " + e.getMessage(), e);
+                }
 
                 if (!result.isSuccess()) {
                     throw new RuntimeException("Node execution failed: " + result.getError());
